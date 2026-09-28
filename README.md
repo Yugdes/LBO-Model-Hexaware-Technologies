@@ -2,6 +2,8 @@
 
 ## Carlyle Group Take-Private of Hexaware Technologies Ltd. (2021)
 
+🚀 **Live Interactive Model:** [https://yugdes.github.io/LBO-Model-Hexaware-Technologies/](https://yugdes.github.io/LBO-Model-Hexaware-Technologies/)
+
 > **Resume Bullet:** *Built a full LBO model for Carlyle Group's $2.9B take-private of Hexaware Technologies with sources & uses, 5-year debt schedule with 50% cash sweep, and returns analysis yielding a **24.8% IRR / 3.04x MOIC** at base case; sensitivity analysis reveals exit multiple as the dominant return driver — a ±2x swing in exit EV/EBITDA moves IRR by ~15pp vs. ~9pp from entry multiple and ~6pp from leverage.*
 
 ---
