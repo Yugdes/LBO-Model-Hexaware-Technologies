@@ -1,0 +1,824 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LBO Model — Hexaware Technologies | Carlyle Group Take-Private</title>
+    <meta name="description" content="Comprehensive Leveraged Buyout model for Hexaware Technologies' take-private by Carlyle Group. Full sources & uses, debt schedule with cash sweep, IRR/MOIC analysis, and sensitivity tables.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div id="loading-screen" class="loading-screen">
+        <div class="loader">
+            <div class="loader-ring"></div>
+            <div class="loader-text">Initializing LBO Model</div>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-brand">
+            <div class="brand-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+                    <path d="M2 17l10 5 10-5"/>
+                    <path d="M2 12l10 5 10-5"/>
+                </svg>
+            </div>
+            <span class="brand-text">LBO Model</span>
+            <span class="brand-separator">|</span>
+            <span class="brand-company">Hexaware Technologies</span>
+        </div>
+        <div class="nav-links">
+            <a href="#overview" class="nav-link active" data-section="overview">Overview</a>
+            <a href="#sources-uses" class="nav-link" data-section="sources-uses">Sources & Uses</a>
+            <a href="#operating-model" class="nav-link" data-section="operating-model">Operating Model</a>
+            <a href="#debt-schedule" class="nav-link" data-section="debt-schedule">Debt Schedule</a>
+            <a href="#returns" class="nav-link" data-section="returns">Returns</a>
+            <a href="#sensitivity" class="nav-link" data-section="sensitivity">Sensitivity</a>
+        </div>
+        <div class="nav-actions">
+            <button class="btn-icon" id="theme-toggle" title="Toggle Theme">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="icon-sun">
+                    <circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
+                </svg>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="icon-moon" style="display:none">
+                    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+                </svg>
+            </button>
+            <button class="btn-primary" id="export-btn">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
+                </svg>
+                Export Model
+            </button>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- ==================== SECTION: Overview ==================== -->
+        <section id="overview" class="section active">
+            <div class="section-header">
+                <div class="section-header-content">
+                    <h1 class="section-title">Transaction Overview</h1>
+                    <p class="section-subtitle">Carlyle Group Take-Private of Hexaware Technologies Ltd. (2021)</p>
+                </div>
+                <div class="deal-badge">
+                    <span class="badge-dot"></span>
+                    Take-Private Transaction
+                </div>
+            </div>
+
+            <!-- Key Metrics Cards -->
+            <div class="metrics-grid">
+                <div class="metric-card metric-primary">
+                    <div class="metric-header">
+                        <span class="metric-label">Enterprise Value</span>
+                        <div class="metric-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                        </div>
+                    </div>
+                    <div class="metric-value" id="metric-ev">—</div>
+                    <div class="metric-change positive" id="metric-ev-sub">—</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-header">
+                        <span class="metric-label">Entry EV/EBITDA</span>
+                        <div class="metric-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+                        </div>
+                    </div>
+                    <div class="metric-value" id="metric-entry-multiple">—</div>
+                    <div class="metric-change" id="metric-entry-sub">LTM EBITDA based</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-header">
+                        <span class="metric-label">Sponsor IRR</span>
+                        <div class="metric-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+                        </div>
+                    </div>
+                    <div class="metric-value" id="metric-irr">—</div>
+                    <div class="metric-change positive" id="metric-irr-sub">5-year hold</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-header">
+                        <span class="metric-label">MOIC</span>
+                        <div class="metric-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+                        </div>
+                    </div>
+                    <div class="metric-value" id="metric-moic">—</div>
+                    <div class="metric-change" id="metric-moic-sub">Multiple of Invested Capital</div>
+                </div>
+            </div>
+
+            <!-- Deal Summary -->
+            <div class="content-grid">
+                <div class="card card-large">
+                    <div class="card-header">
+                        <h2 class="card-title">Deal Summary</h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="deal-summary-grid">
+                            <div class="deal-item">
+                                <span class="deal-label">Target Company</span>
+                                <span class="deal-value">Hexaware Technologies Ltd.</span>
+                            </div>
+                            <div class="deal-item">
+                                <span class="deal-label">Acquirer / Sponsor</span>
+                                <span class="deal-value">Carlyle Group (via CA Magnum Holdings)</span>
+                            </div>
+                            <div class="deal-item">
+                                <span class="deal-label">Industry</span>
+                                <span class="deal-value">IT Services & Consulting</span>
+                            </div>
+                            <div class="deal-item">
+                                <span class="deal-label">Headquarters</span>
+                                <span class="deal-value">Mumbai, India</span>
+                            </div>
+                            <div class="deal-item">
+                                <span class="deal-label">Transaction Type</span>
+                                <span class="deal-value">Take-Private / Delisting</span>
+                            </div>
+                            <div class="deal-item">
+                                <span class="deal-label">Transaction Date</span>
+                                <span class="deal-value">September 2021</span>
+                            </div>
+                            <div class="deal-item">
+                                <span class="deal-label">LTM Revenue (Pre-Deal)</span>
+                                <span class="deal-value" id="deal-revenue">—</span>
+                            </div>
+                            <div class="deal-item">
+                                <span class="deal-label">LTM EBITDA (Pre-Deal)</span>
+                                <span class="deal-value" id="deal-ebitda">—</span>
+                            </div>
+                            <div class="deal-item">
+                                <span class="deal-label">EBITDA Margin</span>
+                                <span class="deal-value" id="deal-margin">—</span>
+                            </div>
+                            <div class="deal-item">
+                                <span class="deal-label">Employees</span>
+                                <span class="deal-value">~21,000</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Investment Thesis</h2>
+                    </div>
+                    <div class="card-body">
+                        <ul class="thesis-list">
+                            <li>
+                                <div class="thesis-icon positive-bg">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/></svg>
+                                </div>
+                                <div>
+                                    <strong>Secular Tailwinds in IT Services</strong>
+                                    <p>Digital transformation, cloud migration, and data analytics driving robust demand growth across verticals</p>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="thesis-icon positive-bg">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20V10M6 20V4M18 20v-6"/></svg>
+                                </div>
+                                <div>
+                                    <strong>Margin Expansion Opportunity</strong>
+                                    <p>Operational efficiencies through automation, offshoring optimization, and higher-value service mix shift</p>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="thesis-icon positive-bg">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+                                </div>
+                                <div>
+                                    <strong>Strong Free Cash Flow Generation</strong>
+                                    <p>Asset-light model with low capex requirements enabling rapid debt paydown and high equity returns</p>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="thesis-icon positive-bg">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                                </div>
+                                <div>
+                                    <strong>Bolt-On M&A Potential</strong>
+                                    <p>Platform for inorganic growth through tuck-in acquisitions in niche digital capabilities</p>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Assumptions Panel -->
+            <div class="card assumptions-card">
+                <div class="card-header">
+                    <h2 class="card-title">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+                            <circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+                        </svg>
+                        Model Assumptions (Editable)
+                    </h2>
+                    <button class="btn-secondary" id="reset-assumptions">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
+                        Reset to Defaults
+                    </button>
+                </div>
+                <div class="card-body">
+                    <div class="assumptions-grid">
+                        <div class="assumption-group">
+                            <h3 class="assumption-group-title">Transaction</h3>
+                            <div class="assumption-item">
+                                <label for="input-entry-multiple">Entry EV/EBITDA Multiple</label>
+                                <div class="input-wrapper">
+                                    <input type="number" id="input-entry-multiple" value="18.0" step="0.5" min="5" max="40">
+                                    <span class="input-suffix">x</span>
+                                </div>
+                            </div>
+                            <div class="assumption-item">
+                                <label for="input-exit-multiple">Exit EV/EBITDA Multiple</label>
+                                <div class="input-wrapper">
+                                    <input type="number" id="input-exit-multiple" value="20.0" step="0.5" min="5" max="40">
+                                    <span class="input-suffix">x</span>
+                                </div>
+                            </div>
+                            <div class="assumption-item">
+                                <label for="input-hold-period">Hold Period</label>
+                                <div class="input-wrapper">
+                                    <input type="number" id="input-hold-period" value="5" step="1" min="3" max="10">
+                                    <span class="input-suffix">years</span>
+                                </div>
+                            </div>
+                            <div class="assumption-item">
+                                <label for="input-transaction-fees">Transaction Fees</label>
+                                <div class="input-wrapper">
+                                    <input type="number" id="input-transaction-fees" value="2.0" step="0.5" min="0" max="10">
+                                    <span class="input-suffix">% of TEV</span>
+                                </div>
+                            </div>
+                            <div class="assumption-item">
+                                <label for="input-financing-fees">Financing Fees</label>
+                                <div class="input-wrapper">
+                                    <input type="number" id="input-financing-fees" value="3.0" step="0.5" min="0" max="10">
+                                    <span class="input-suffix">% of Debt</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="assumption-group">
+                            <h3 class="assumption-group-title">Capital Structure</h3>
+                            <div class="assumption-item">
+                                <label for="input-senior-debt-turns">Senior Secured Debt</label>
+                                <div class="input-wrapper">
+                                    <input type="number" id="input-senior-debt-turns" value="3.0" step="0.25" min="0" max="8">
+                                    <span class="input-suffix">x EBITDA</span>
+                                </div>
+                            </div>
+                            <div class="assumption-item">
+                                <label for="input-sub-debt-turns">Subordinated Debt</label>
+                                <div class="input-wrapper">
+                                    <input type="number" id="input-sub-debt-turns" value="1.5" step="0.25" min="0" max="5">
+                                    <span class="input-suffix">x EBITDA</span>
+                                </div>
+                            </div>
+                            <div class="assumption-item">
+                                <label for="input-senior-rate">Senior Debt Interest Rate</label>
+                                <div class="input-wrapper">
+                                    <input type="number" id="input-senior-rate" value="6.5" step="0.25" min="1" max="15">
+                                    <span class="input-suffix">%</span>
+                                </div>
+                            </div>
+                            <div class="assumption-item">
+                                <label for="input-sub-rate">Subordinated Debt Rate</label>
+                                <div class="input-wrapper">
+                                    <input type="number" id="input-sub-rate" value="9.5" step="0.25" min="1" max="20">
+                                    <span class="input-suffix">%</span>
+                                </div>
+                            </div>
+                            <div class="assumption-item">
+                                <label for="input-mandatory-amort">Mandatory Amortization (Senior)</label>
+                                <div class="input-wrapper">
+                                    <input type="number" id="input-mandatory-amort" value="5.0" step="1" min="0" max="25">
+                                    <span class="input-suffix">% / yr</span>
+                                </div>
+                            </div>
+                            <div class="assumption-item">
+                                <label for="input-cash-sweep">Cash Sweep %</label>
+                                <div class="input-wrapper">
+                                    <input type="number" id="input-cash-sweep" value="50.0" step="5" min="0" max="100">
+                                    <span class="input-suffix">% of FCF</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="assumption-group">
+                            <h3 class="assumption-group-title">Operating Assumptions</h3>
+                            <div class="assumption-item">
+                                <label for="input-revenue-growth">Revenue Growth Rate</label>
+                                <div class="input-wrapper">
+                                    <input type="number" id="input-revenue-growth" value="12.0" step="0.5" min="-10" max="40">
+                                    <span class="input-suffix">% CAGR</span>
+                                </div>
+                            </div>
+                            <div class="assumption-item">
+                                <label for="input-ebitda-margin-yr1">EBITDA Margin (Year 1)</label>
+                                <div class="input-wrapper">
+                                    <input type="number" id="input-ebitda-margin-yr1" value="19.5" step="0.5" min="5" max="60">
+                                    <span class="input-suffix">%</span>
+                                </div>
+                            </div>
+                            <div class="assumption-item">
+                                <label for="input-ebitda-margin-exit">EBITDA Margin (Exit Year)</label>
+                                <div class="input-wrapper">
+                                    <input type="number" id="input-ebitda-margin-exit" value="23.0" step="0.5" min="5" max="60">
+                                    <span class="input-suffix">%</span>
+                                </div>
+                            </div>
+                            <div class="assumption-item">
+                                <label for="input-capex">Capex (% of Revenue)</label>
+                                <div class="input-wrapper">
+                                    <input type="number" id="input-capex" value="3.0" step="0.5" min="0" max="30">
+                                    <span class="input-suffix">%</span>
+                                </div>
+                            </div>
+                            <div class="assumption-item">
+                                <label for="input-nwc-change">NWC Change (% of Δ Revenue)</label>
+                                <div class="input-wrapper">
+                                    <input type="number" id="input-nwc-change" value="5.0" step="1" min="0" max="30">
+                                    <span class="input-suffix">%</span>
+                                </div>
+                            </div>
+                            <div class="assumption-item">
+                                <label for="input-tax-rate">Tax Rate</label>
+                                <div class="input-wrapper">
+                                    <input type="number" id="input-tax-rate" value="25.0" step="1" min="0" max="50">
+                                    <span class="input-suffix">%</span>
+                                </div>
+                            </div>
+                            <div class="assumption-item">
+                                <label for="input-da">D&A (% of Revenue)</label>
+                                <div class="input-wrapper">
+                                    <input type="number" id="input-da" value="2.5" step="0.5" min="0" max="20">
+                                    <span class="input-suffix">%</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="assumptions-actions">
+                        <button class="btn-primary btn-large" id="recalculate-btn">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+                                <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/>
+                            </svg>
+                            Recalculate Model
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== SECTION: Sources & Uses ==================== -->
+        <section id="sources-uses" class="section">
+            <div class="section-header">
+                <div class="section-header-content">
+                    <h1 class="section-title">Sources & Uses</h1>
+                    <p class="section-subtitle">Transaction financing structure and use of funds</p>
+                </div>
+            </div>
+
+            <div class="content-grid su-grid">
+                <!-- Sources -->
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title sources-title">Sources of Funds</h2>
+                    </div>
+                    <div class="card-body">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Source</th>
+                                    <th class="text-right">Amount ($M)</th>
+                                    <th class="text-right">% of Total</th>
+                                    <th class="text-right">x EBITDA</th>
+                                </tr>
+                            </thead>
+                            <tbody id="sources-table-body">
+                                <!-- Populated by JS -->
+                            </tbody>
+                            <tfoot>
+                                <tr class="total-row">
+                                    <td><strong>Total Sources</strong></td>
+                                    <td class="text-right" id="total-sources">—</td>
+                                    <td class="text-right">100.0%</td>
+                                    <td class="text-right" id="total-sources-turns">—</td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Uses -->
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title uses-title">Uses of Funds</h2>
+                    </div>
+                    <div class="card-body">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Use</th>
+                                    <th class="text-right">Amount ($M)</th>
+                                    <th class="text-right">% of Total</th>
+                                    <th class="text-right">x EBITDA</th>
+                                </tr>
+                            </thead>
+                            <tbody id="uses-table-body">
+                                <!-- Populated by JS -->
+                            </tbody>
+                            <tfoot>
+                                <tr class="total-row">
+                                    <td><strong>Total Uses</strong></td>
+                                    <td class="text-right" id="total-uses">—</td>
+                                    <td class="text-right">100.0%</td>
+                                    <td class="text-right" id="total-uses-turns">—</td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Capital Structure Visualization -->
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">Capital Structure</h2>
+                </div>
+                <div class="card-body">
+                    <div class="cap-structure-visual">
+                        <div class="cap-bar-container" id="cap-structure-bar">
+                            <!-- Populated by JS -->
+                        </div>
+                        <div class="cap-legend" id="cap-structure-legend">
+                            <!-- Populated by JS -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== SECTION: Operating Model ==================== -->
+        <section id="operating-model" class="section">
+            <div class="section-header">
+                <div class="section-header-content">
+                    <h1 class="section-title">Operating Model</h1>
+                    <p class="section-subtitle">Projected P&L and free cash flow over the hold period</p>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">Projected Income Statement & Free Cash Flow</h2>
+                </div>
+                <div class="card-body table-scroll">
+                    <table class="data-table financial-table">
+                        <thead>
+                            <tr>
+                                <th class="sticky-col">($M)</th>
+                                <th class="text-right year-base">Base Year</th>
+                                <th class="text-right">Year 1</th>
+                                <th class="text-right">Year 2</th>
+                                <th class="text-right">Year 3</th>
+                                <th class="text-right">Year 4</th>
+                                <th class="text-right">Year 5</th>
+                            </tr>
+                        </thead>
+                        <tbody id="operating-model-body">
+                            <!-- Populated by JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Charts -->
+            <div class="content-grid">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Revenue & EBITDA Trend</h2>
+                    </div>
+                    <div class="card-body">
+                        <canvas id="chart-revenue-ebitda" height="300"></canvas>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Free Cash Flow Bridge</h2>
+                    </div>
+                    <div class="card-body">
+                        <canvas id="chart-fcf" height="300"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== SECTION: Debt Schedule ==================== -->
+        <section id="debt-schedule" class="section">
+            <div class="section-header">
+                <div class="section-header-content">
+                    <h1 class="section-title">Debt Schedule</h1>
+                    <p class="section-subtitle">Amortization, cash sweep, and interest expense detail</p>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">Senior Secured Debt Schedule</h2>
+                    <span class="card-badge">With Cash Sweep</span>
+                </div>
+                <div class="card-body table-scroll">
+                    <table class="data-table financial-table">
+                        <thead>
+                            <tr>
+                                <th class="sticky-col">($M)</th>
+                                <th class="text-right">Year 0</th>
+                                <th class="text-right">Year 1</th>
+                                <th class="text-right">Year 2</th>
+                                <th class="text-right">Year 3</th>
+                                <th class="text-right">Year 4</th>
+                                <th class="text-right">Year 5</th>
+                            </tr>
+                        </thead>
+                        <tbody id="senior-debt-body">
+                            <!-- Populated by JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">Subordinated Debt Schedule</h2>
+                    <span class="card-badge badge-secondary">Bullet Maturity</span>
+                </div>
+                <div class="card-body table-scroll">
+                    <table class="data-table financial-table">
+                        <thead>
+                            <tr>
+                                <th class="sticky-col">($M)</th>
+                                <th class="text-right">Year 0</th>
+                                <th class="text-right">Year 1</th>
+                                <th class="text-right">Year 2</th>
+                                <th class="text-right">Year 3</th>
+                                <th class="text-right">Year 4</th>
+                                <th class="text-right">Year 5</th>
+                            </tr>
+                        </thead>
+                        <tbody id="sub-debt-body">
+                            <!-- Populated by JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">Total Debt Summary & Credit Metrics</h2>
+                </div>
+                <div class="card-body table-scroll">
+                    <table class="data-table financial-table">
+                        <thead>
+                            <tr>
+                                <th class="sticky-col">Metric</th>
+                                <th class="text-right">Year 0</th>
+                                <th class="text-right">Year 1</th>
+                                <th class="text-right">Year 2</th>
+                                <th class="text-right">Year 3</th>
+                                <th class="text-right">Year 4</th>
+                                <th class="text-right">Year 5</th>
+                            </tr>
+                        </thead>
+                        <tbody id="total-debt-body">
+                            <!-- Populated by JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Debt Charts -->
+            <div class="content-grid">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Debt Paydown Over Time</h2>
+                    </div>
+                    <div class="card-body">
+                        <canvas id="chart-debt-paydown" height="300"></canvas>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Leverage & Coverage Ratios</h2>
+                    </div>
+                    <div class="card-body">
+                        <canvas id="chart-leverage" height="300"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== SECTION: Returns ==================== -->
+        <section id="returns" class="section">
+            <div class="section-header">
+                <div class="section-header-content">
+                    <h1 class="section-title">Returns Analysis</h1>
+                    <p class="section-subtitle">Sponsor equity returns — IRR and MOIC by exit year</p>
+                </div>
+            </div>
+
+            <!-- Returns Key Metrics -->
+            <div class="metrics-grid returns-metrics">
+                <div class="metric-card metric-highlight">
+                    <div class="metric-header">
+                        <span class="metric-label">Sponsor IRR</span>
+                    </div>
+                    <div class="metric-value" id="returns-irr">—</div>
+                    <div class="metric-subtext">Internal Rate of Return</div>
+                </div>
+                <div class="metric-card metric-highlight">
+                    <div class="metric-header">
+                        <span class="metric-label">MOIC</span>
+                    </div>
+                    <div class="metric-value" id="returns-moic">—</div>
+                    <div class="metric-subtext">Multiple of Invested Capital</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-header">
+                        <span class="metric-label">Initial Equity</span>
+                    </div>
+                    <div class="metric-value" id="returns-initial-equity">—</div>
+                    <div class="metric-subtext">Sponsor Check</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-header">
+                        <span class="metric-label">Exit Equity Value</span>
+                    </div>
+                    <div class="metric-value" id="returns-exit-equity">—</div>
+                    <div class="metric-subtext">After Debt Payoff</div>
+                </div>
+            </div>
+
+            <!-- Returns Waterfall -->
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">Returns Waterfall</h2>
+                </div>
+                <div class="card-body table-scroll">
+                    <table class="data-table financial-table">
+                        <thead>
+                            <tr>
+                                <th class="sticky-col">($M)</th>
+                                <th class="text-right">Value</th>
+                            </tr>
+                        </thead>
+                        <tbody id="returns-waterfall-body">
+                            <!-- Populated by JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Returns by Exit Year -->
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">Returns by Exit Year</h2>
+                </div>
+                <div class="card-body table-scroll">
+                    <table class="data-table financial-table">
+                        <thead>
+                            <tr>
+                                <th class="sticky-col">Metric</th>
+                                <th class="text-right">Year 3</th>
+                                <th class="text-right">Year 4</th>
+                                <th class="text-right">Year 5</th>
+                            </tr>
+                        </thead>
+                        <tbody id="returns-by-year-body">
+                            <!-- Populated by JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Returns attribution chart -->
+            <div class="content-grid">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Value Creation Bridge</h2>
+                    </div>
+                    <div class="card-body">
+                        <canvas id="chart-value-creation" height="300"></canvas>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">IRR vs MOIC by Exit Year</h2>
+                    </div>
+                    <div class="card-body">
+                        <canvas id="chart-irr-moic" height="300"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== SECTION: Sensitivity ==================== -->
+        <section id="sensitivity" class="section">
+            <div class="section-header">
+                <div class="section-header-content">
+                    <h1 class="section-title">Sensitivity Analysis</h1>
+                    <p class="section-subtitle">IRR and MOIC sensitivity to key assumptions</p>
+                </div>
+            </div>
+
+            <!-- Sensitivity: Entry Multiple vs Exit Multiple -->
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">IRR Sensitivity: Entry Multiple vs. Exit Multiple</h2>
+                    <span class="card-badge badge-info">Key Driver</span>
+                </div>
+                <div class="card-body table-scroll">
+                    <table class="data-table sensitivity-table" id="sensitivity-entry-exit-irr">
+                        <!-- Populated by JS -->
+                    </table>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">MOIC Sensitivity: Entry Multiple vs. Exit Multiple</h2>
+                </div>
+                <div class="card-body table-scroll">
+                    <table class="data-table sensitivity-table" id="sensitivity-entry-exit-moic">
+                        <!-- Populated by JS -->
+                    </table>
+                </div>
+            </div>
+
+            <!-- Sensitivity: Leverage vs Exit Multiple -->
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">IRR Sensitivity: Total Leverage vs. Exit Multiple</h2>
+                </div>
+                <div class="card-body table-scroll">
+                    <table class="data-table sensitivity-table" id="sensitivity-leverage-exit-irr">
+                        <!-- Populated by JS -->
+                    </table>
+                </div>
+            </div>
+
+            <!-- Sensitivity: Revenue Growth vs EBITDA Margin -->
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">IRR Sensitivity: Revenue Growth vs. Exit EBITDA Margin</h2>
+                </div>
+                <div class="card-body table-scroll">
+                    <table class="data-table sensitivity-table" id="sensitivity-growth-margin-irr">
+                        <!-- Populated by JS -->
+                    </table>
+                </div>
+            </div>
+
+            <!-- Key Finding -->
+            <div class="card finding-card">
+                <div class="card-header">
+                    <h2 class="card-title">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>
+                        </svg>
+                        Key Sensitivity Finding
+                    </h2>
+                </div>
+                <div class="card-body">
+                    <p class="finding-text" id="sensitivity-finding">
+                        <!-- Populated by JS -->
+                    </p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <p>LBO Model — Hexaware Technologies Take-Private by Carlyle Group</p>
+            <p class="footer-disclaimer">This model is for educational and analytical purposes only. All figures are based on publicly available data and analyst estimates.</p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script src="js/lbo-engine.js"></script>
+    <script src="js/charts.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
