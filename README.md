@@ -205,5 +205,8 @@ This model demonstrates mastery of the following LBO concepts frequently tested 
 This model is built for **educational and analytical purposes** to demonstrate LBO modeling proficiency. All financial figures are based on publicly available data and analyst estimates. This does not constitute investment advice.
 
 ---
+## Author
 
-*Built by [Your Name] | [Year]*
+**Yug Desai** — Mechanical Engineering, IIT Gandhinagar (Class of 2027). Interested in Investment Banking and Financial Analytics.
+
+[LinkedIn](https://www.linkedin.com/in/yug-desai-9a227428b/) · [Email](mailto:yug.desai@iitgn.ac.in)
